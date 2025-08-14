@@ -23,7 +23,7 @@ public class ProductService {
         return productRepo.findById(productId).orElse(null);
     }
 
-    public Product addProduct(Product product, MultipartFile image)
+    public Product addOrUpdateProduct(Product product, MultipartFile image)
             throws IOException {
         product.setImageName(image.getOriginalFilename());
         product.setImageType(image.getContentType());
@@ -31,15 +31,11 @@ public class ProductService {
         return productRepo.save(product);
     }
 
-    public Product updateProduct(Product product, MultipartFile imageFile)
-            throws IOException {
-        product.setImageName(imageFile.getOriginalFilename());
-        product.setImageType(imageFile.getContentType());
-        product.setImageData(imageFile.getBytes());
-        return productRepo.save(product);
-    }
-
     public void deleteProductById(Integer productId) {
         productRepo.deleteById(productId);
+    }
+
+    public List<Product> searchProductsByKeyword(String keyword) {
+        return productRepo.searchProducts(keyword);
     }
 }

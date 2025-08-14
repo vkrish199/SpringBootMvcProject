@@ -42,7 +42,7 @@ public class ProductController {
                                         @RequestPart MultipartFile imageFile) {
         Product p;
         try {
-            p = productService.addProduct(product, imageFile);
+            p = productService.addOrUpdateProduct(product, imageFile);
             return new ResponseEntity<>(p, HttpStatus.CREATED);
         } catch (IOException e) {
             return new ResponseEntity<>(e.getMessage(),
@@ -62,7 +62,7 @@ public class ProductController {
                                            @RequestPart MultipartFile imageFile) {
         Product p;
         try {
-            p = productService.updateProduct(product, imageFile);
+            p = productService.addOrUpdateProduct(product, imageFile);
             return new ResponseEntity<>("Updated", HttpStatus.OK);
         } catch (IOException e) {
             return new ResponseEntity<>(e.getMessage(),
@@ -74,6 +74,12 @@ public class ProductController {
     public ResponseEntity<String> deleteProduct(@PathVariable Integer productId) {
         productService.deleteProductById(productId);
         return new ResponseEntity<>("Deleted", HttpStatus.OK);
+    }
+
+    @GetMapping("filter_products")
+    public ResponseEntity<List<Product>> searchProductsByKeyword(@RequestParam String keyword) {
+        List<Product> products = productService.searchProductsByKeyword(keyword);
+        return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
 }
